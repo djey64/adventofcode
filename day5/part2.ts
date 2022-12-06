@@ -7,17 +7,37 @@ export const input = fs
   .trim()
   .split("\n");
 
-let count = input.length;
-console.log(input.length);
-input.forEach((i) => {
-  const [first, second] = i.split(",");
+/**
+                    [Q]     [P] [P]
+                [G] [V] [S] [Z] [F]
+            [W] [V] [F] [Z] [W] [Q]
+        [V] [T] [N] [J] [W] [B] [W]
+    [Z] [L] [V] [B] [C] [R] [N] [M]
+[C] [W] [R] [H] [H] [P] [T] [M] [B]
+[Q] [Q] [M] [Z] [Z] [N] [G] [G] [J]
+[B] [R] [B] [C] [D] [H] [D] [C] [N]
+ 1   2   3   4   5   6   7   8   9 
+ */
 
-  const [f1, f2] = first.split("-");
-  const [s1, s2] = second.split("-");
+const stacks = [
+  ["B", "Q", "C"],
+  ["R", "Q", "W", "Z"],
+  ["B", "M", "R", "L", "V"],
+  ["C", "Z", "H", "V", "T", "W"],
+  ["D", "Z", "H", "B", "N", "V", "G"],
+  ["H", "N", "P", "C", "J", "F", "V", "Q"],
+  ["D", "G", "T", "R", "W", "Z", "S"],
+  ["C", "G", "M", "N", "B", "W", "Z", "P"],
+  ["N", "J", "B", "M", "W", "Q", "F", "P"],
+];
 
-  if (+f2 < +s1 || +f1 > +s2) {
-    count--;
-    console.log(i);
-  }
+input.forEach((str) => {
+  const [quantity, from, to] = str.match(/\d+/g).map((e) => parseInt(e));
+
+  const removed = stacks[from - 1].splice(
+    stacks[from - 1].length - quantity,
+    quantity
+  );
+  stacks[to - 1].push(...removed);
 });
-console.log(count);
+console.log(stacks.map((stack) => stack.pop()).join(""));

@@ -32,6 +32,11 @@ const stacks = [
 ];
 
 input.forEach((str) => {
-  const numbers = str.match(/\d+/g);
-  console.log(numbers);
+  const [quantity, from, to] = str.match(/\d+/g).map((e) => parseInt(e));
+
+  for (let i = 0; i < quantity; i++) {
+    if (stacks[from - 1].length > 0)
+      stacks[to - 1].push(stacks[from - 1].pop());
+  }
 });
+console.log(stacks.map((stack) => stack.pop()).join(""));
