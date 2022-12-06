@@ -19,19 +19,19 @@ export const input = fs
  1   2   3   4   5   6   7   8   9 
  */
 
-var b = new buckets.Set();
+const stacks = [
+  ["B", "Q", "C"],
+  ["R", "Q", "W", "Z"],
+  ["B", "M", "R", "L", "V"],
+  ["C", "Z", "H", "V", "T", "W"],
+  ["D", "Z", "H", "B", "N", "V", "G"],
+  ["H", "N", "P", "C", "J", "F", "V", "Q"],
+  ["D", "G", "T", "R", "W", "Z", "S"],
+  ["C", "G", "M", "N", "B", "W", "Z", "P"],
+  ["N", "J", "B", "M", "W", "Q", "F", "P"],
+];
 
-let count = 0;
-console.log(input.length);
-input.forEach((i) => {
-  const [first, second] = i.split(",");
-
-  const [f1, f2] = first.split("-");
-  const [s1, s2] = second.split("-");
-
-  if ((+f1 <= +s1 && +f2 >= +s2) || (+f1 >= +s1 && +f2 <= +s2)) {
-    count++;
-    console.log(i);
-  }
+input.forEach((str) => {
+  const numbers = str.match(/\d+/g);
+  console.log(numbers);
 });
-console.log(count);
