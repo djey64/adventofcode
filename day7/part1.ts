@@ -14,6 +14,12 @@ type Node = {
   name: string;
 };
 
+export const input = fs
+  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
+  .toString()
+  .trim()
+  .split("\n");
+
 const createDir = (parent: Node, dirName: string) =>
   parent.childs.push({
     parent,
@@ -39,18 +45,33 @@ const createFile = (dir: Node, fileName: string, size: number) => {
   updateDirSize(dir, size);
 };
 
-export const input = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .toString()
-  .trim()
-  .split("\n");
+const displayTree = (current: Node, level = 0) => {
+  const indent = new Array(level + 1).join("--");
+  const size =
+    current.type === NodeType.Directory ? " (" + current.size + ")" : "";
+  console.log(indent + current.name + size);
+
+  current.childs.forEach((c) => displayTree(c, level + 1));
+};
+
+const findDirectoryAbove100ko = (current: Node): Node[] => {
+  let dirs = current.size <= 100_000 ? [current] : [];
+  current.childs
+    .filter((c) => c.type === NodeType.Directory)
+    .forEach((child) => {
+      dirs.push(...findDirectoryAbove100ko(child));
+    });
+
+  return dirs;
+};
 
 const tree: Node = {
   type: NodeType.Directory,
   childs: [],
   size: 0,
-  name: "Root",
+  name: "/",
 };
+
 let current = tree;
 
 const changeDirRegex = "^\\$ cd (\\S+)";
@@ -72,33 +93,7 @@ input.forEach((str) => {
   }
 });
 
-const displayTree = (current: Node, level = 0) => {
-  const indent = new Array(level + 1).join("--");
-  current.childs.forEach((child) => {
-    const size =
-      child.type === NodeType.Directory ? " (" + child.size + ")" : "";
-    console.log(indent + child.name + size);
-    child.childs.forEach((c) => displayTree(c, level + 1));
-  });
-};
-
-const findDirectoryAbove100ko = (current: Node): Node[] => {
-  let dirs = current.size >= 100_000 ? [current] : [];
-  current.childs
-    .filter((c) => c.type === NodeType.Directory)
-    .forEach((child) => {
-      dirs.push(
-        ...child.childs
-          .filter((c) => c.type === NodeType.Directory)
-          .flatMap((c) => findDirectoryAbove100ko(c))
-      );
-    });
-
-  return dirs;
-};
-
 displayTree(tree);
-console.log(findDirectoryAbove100ko(tree));
 console.log(
   findDirectoryAbove100ko(tree)
     .map((dir) => dir.size)
