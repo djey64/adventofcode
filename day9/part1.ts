@@ -35,7 +35,7 @@ const history = new Set();
 history.add(JSON.stringify(T));
 
 input.forEach((line) => {
-  const [_, direction, count] = line.match("(.) (\\d+)");
+  const [direction, count] = line.split(" ");
   for (let i = 0; i < +count; i++) {
     const lastHeadPosition = { ...H };
     // Update H
