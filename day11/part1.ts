@@ -48,7 +48,7 @@ const readMonkeys = (input: string[]): Monkey[] => {
 };
 
 const input = fs
-  .readFileSync(path.join(__dirname, "exemple.txt"), "utf8")
+  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
   .toString()
   .trim()
   .split("\n");
@@ -56,14 +56,14 @@ const input = fs
 const monkeys: Monkey[] = readMonkeys(input);
 
 for (let i = 0; i < 20; i++) {
-  monkeys.forEach((m, mi) => {
+  monkeys.forEach((m) => {
     while (m.items.length > 0) {
       m.inspectCount++;
       const item = m.items.shift();
       const newWorry = m.op(item);
-      monkeys[newWorry % m.div === 0 ? m.trueTrowTo : m.falseTrowTo].items.push(
-        newWorry
-      );
+      monkeys[
+        Math.floor(newWorry / 3) % m.div === 0 ? m.trueTrowTo : m.falseTrowTo
+      ].items.push(Math.floor(newWorry / 3));
     }
   });
 }
