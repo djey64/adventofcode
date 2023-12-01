@@ -1,4 +1,4 @@
-import { expect, describe, it, jest, test } from "@jest/globals";
+import { expect, describe, it } from "@jest/globals";
 import { computeOperation } from "./part1";
 
 describe("computeOperation", () => {
