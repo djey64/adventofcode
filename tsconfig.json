@@ -1,7 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es6",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": false,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
+    "inlineSourceMap": true
+  },
+  "ts-node": {
+    "esm": true
   }
 }
