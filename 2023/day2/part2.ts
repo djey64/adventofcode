@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 
+// https://adventofcode.com/2023/day/2
 export const input = fs
     .readFileSync(path.join(__dirname, "input.txt"), "utf8")
     .toString()
