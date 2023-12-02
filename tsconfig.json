@@ -2,8 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "ES6",
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
