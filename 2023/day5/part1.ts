@@ -3,7 +3,7 @@ import fs from "fs";
 
 // https://adventofcode.com/2023/day/5
 export let input = fs
-    .readFileSync(path.join(__dirname, "exemple.txt"), "utf8")
+    .readFileSync(path.join(__dirname, "input.txt"), "utf8")
     .toString()
     .trim()
     .split("\n");
@@ -15,7 +15,7 @@ type ConversionProperties = {
 }
 
 type Map = {
-    properties: ConversionProperties[]
+    ranges: ConversionProperties[]
     next?: Map
 }
 
@@ -25,7 +25,7 @@ const fillMaps = (input: string[], map: Map) => {
     while (input.length > 0 && input[0].length > 1) {
         const line: string = input.shift()
         const [destination, source, number] = line.split(' ').map(n => parseInt(n))
-        map.properties.push({ source, destination, number })
+        map.ranges.push({ source, destination, number })
     }
     if (input.length > 0) {
         // remove empty line between maps
@@ -34,14 +34,36 @@ const fillMaps = (input: string[], map: Map) => {
     }
 }
 
-const humidityToLocation: Map = { properties: [] }
-const temperatureToHumidity: Map = { properties: [], next: humidityToLocation }
-const lightToTemperature: Map = { properties: [], next: temperatureToHumidity }
-const waterToLight: Map = { properties: [], next: lightToTemperature }
-const fertilizerToWater: Map = { properties: [], next: waterToLight }
-const soilToFertilizer: Map = { properties: [], next: fertilizerToWater }
-const seedToSoil: Map = { properties: [], next: soilToFertilizer }
-const seeds = input[0].substring(7).split(' ')
+const findLocation = (n: number, map: Map): number => {
+    let destinationNumber = n
+
+    map.ranges.forEach(range => {
+        if(n >= range.source && n <= range.source + (range.number - 1)) {
+            destinationNumber = destinationNumber + (range.destination - range.source)
+        }
+    })
+
+    if (map.next) {
+        return findLocation(destinationNumber, map.next)
+    }
+
+    return destinationNumber;
+}
+
+const humidityToLocation: Map = { ranges: [] }
+const temperatureToHumidity: Map = { ranges: [], next: humidityToLocation }
+const lightToTemperature: Map = { ranges: [], next: temperatureToHumidity }
+const waterToLight: Map = { ranges: [], next: lightToTemperature }
+const fertilizerToWater: Map = { ranges: [], next: waterToLight }
+const soilToFertilizer: Map = { ranges: [], next: fertilizerToWater }
+const seedToSoil: Map = { ranges: [], next: soilToFertilizer }
+const seeds = input[0].substring(7).split(' ').map(s => parseInt(s))
 input = input.slice(2)
 
 fillMaps(input, seedToSoil)
+
+let minLocation = Number.MAX_VALUE
+seeds.forEach(seed => {
+    minLocation = Math.min(minLocation, findLocation(seed, seedToSoil))
+})
+console.log(minLocation)
