@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-// https://adventofcode.com/2023/day/6
+// https://adventofcode.com/2023/day/7
 export let input = fs
     .readFileSync(path.join(__dirname, "input.txt"), "utf8")
     .toString()
